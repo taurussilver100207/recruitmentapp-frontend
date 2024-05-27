@@ -4,29 +4,7 @@
     font-size: 17px;
 }
 
-/* .recruiment {
-    margin-bottom: 700px;
-    display: flex;
-    font-size: 18px;
-}
-
-.recuite {
-    padding-bottom: 20px;
-}
-
-.imgs {
-    align-items: center;
-}
-
-.recuite h2 {
-    margin-left: 10px;
-}
-
-.menu-items {
-    display: flex;
-} */
-
-ul,
+/* ul,
 li {
     display: flex;
     width: 900px;
@@ -48,15 +26,50 @@ th {
     width: 600px;
 }
  
+.heading {
+    font-size: 30px;
+}
 .test button{
-    margin-top: 30px;
+    margin-top: 40px;
+    font-size: 20px;
 }
 
 .search-bar{
     font-size: 30px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 .search-bar input {
     border: 2px solid black;
     border-radius: 8px;
+} */
+
+.head{
+    font-size: 30px;
+}
+.heading {
+    font-size: 20px;
+}
+
+.listTest{
+    font-family: 'Times New Roman', Times, serif;
+}
+
+label{
+    font-size: 20px;
+}
+.new-test-form textarea{
+    border:  2px solid black;
+    margin-top: 15px;
+}
+select option {
+    font-size: 20px;
+}
+.new-test-form input{
+    font-size: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+}
+.new-test-form button{
+    margin-top: 15px;
+    font-size: 20px;
 }
