@@ -10,6 +10,7 @@ import RecruimentRoundDetail from './Components/RecruimentRound/RecruimentRoundD
 import Home from './Components1/Home.jsx';
 import AdminRecuiment from './Components1/AdminRecuiment.jsx';
 import RecruimentRoundList from './Components/RecruimentRound/RecruimentRoundList.jsx';
+import RecruimentList from './Components1/RecruimentList.jsx';
 function App() {
 
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path='/recruimentRoundForm' element={<RecruimentRoundForm />} />
       <Route path='/candidateList' element={<CandidateList />} />
       <Route path='/candidateForm' element={<CandidateForm />} />
+      <Route path='/recruimentList' element={<RecruimentList/>}/>
     </Routes>
 
   )
