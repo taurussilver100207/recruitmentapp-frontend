@@ -1,14 +1,15 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom"
-import AuthPage from "./pages/authPage"
+import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import Recruiment from './Components/Recruiment/Recruiment.jsx'
 
-const App = () => {
+function App() {
+  // const [count, setCount] = useState(0)
+
   return (
-    <div className="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AuthPage />} />
-        </Routes>
-      </BrowserRouter>
+    <div>
+    <Recruiment/>
     </div>
   )
 }
