@@ -1,0 +1,95 @@
+.formRecruiment {
+    font-size: 22px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.formRecruimentManage {
+    border: 2px solid black;
+    background-color: aliceblue;
+    border-radius: 6px;
+    width: 600px;
+    height: 610px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headList {
+    font-size: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    color: darkturquoise;
+}
+
+.recruimentList input {
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
+.recruimentDate input {
+    border: 2px solid black;
+    border-radius: 8px;
+    width: 270px;
+    margin-left: 65px;
+}
+
+.recruimentList textarea {
+    border: 2px solid black;
+    border-radius: 6px;
+    margin-left: 50px;
+    width: 270px;
+}
+
+.recruimentLabel input {
+    margin-left: 60px;
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
+.recruimentButton {
+    background-color: darkturquoise;
+    width: 140px;
+    height: 40px;
+    margin-right: 10px;
+    font-size: 25px;
+    border-radius: 8px;
+}
+
+.recruimentHead {
+    font-size: 55px;
+    color: darkturquoise;
+    margin-top: 20px;
+}
+
+.recruimentName input {
+    margin-top: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-size: 24px;
+    margin-left: 32px;
+}
+
+.recruimentDate input {
+    border: 2px solid black;
+    margin-right: 60px;
+    font-size: 20px;
+}
+
+.startdate {
+    /* margin-left: 45px; */
+}
+
+.recruimentData input {
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.recruimentQuantify input {
+    margin-left: 25px;
+    font-size: 24px;
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-top: 20px;
+}
