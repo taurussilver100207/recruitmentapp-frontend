@@ -43,7 +43,7 @@ const RecruimentRoundForm = () => {
     };
 
     useEffect(() => {
-        axios.post('http://localhost:9000/recruiments/createRecruiment')
+        axios.post(`http://localhost:9000/recruiments/createRecruiment`)
             .then(response => setRounds(response.data))
     }, [])
     const addRound = () => {

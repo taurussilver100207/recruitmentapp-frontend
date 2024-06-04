@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Recruiment from './Components/Recruiment/Recruiment.jsx'
 import { Routes, Route } from "react-router-dom";
@@ -14,6 +13,7 @@ import SendMailForm from './Components/MailPage/sendMail.jsx'
 import ListJobs from './Components/JobPage/jobListAdmin.jsx';
 import UserJobList from './Components/JobPage/jobListUser.jsx';
 import CreateJobForm from './Components/JobPage/createJob.jsx';
+import RecruimentList from './Components1/RecruimentList.jsx';
 function App() {
 
   return (
@@ -32,6 +32,7 @@ function App() {
       <Route path="/job-admin" element={<ListJobs />} />
       <Route path="/job-user" element={<UserJobList />} />
       <Route path="/createJob" element={<CreateJobForm />} />
+      <Route path='/recruimentList' element={<RecruimentList/>}/>
     </Routes>
 
   )
