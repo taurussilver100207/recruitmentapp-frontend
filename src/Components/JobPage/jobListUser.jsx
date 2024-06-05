@@ -66,7 +66,7 @@ export default function ListJobsUser() {
         <div className="container mx-auto p-4 flex flex-col h-screen">
             <div className="flex-grow flex overflow-hidden">
                 <div className="w-3/5 pr-4 h-full overflow-y-auto custom-scroll">
-                    <h1 className="text-red-800 font-bold mb-4">Job List</h1>
+                    <h1 className="text-green-800 font-bold mb-4">Job List</h1>
                     <ul className="space-y-4">
                         {jobs.map(job => (
                             <li
