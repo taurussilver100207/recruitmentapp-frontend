@@ -1,6 +1,11 @@
 import { NavLink } from 'react-router-dom'
+import { setLogout } from '../state/auth'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import './style.css'
 export default function Home() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     return (
         <div>
             <>
@@ -17,6 +22,7 @@ export default function Home() {
                                 <NavLink to="/recruimentRoundForm" className="list-group-item list-group-item-action">recruimentRoundForm</NavLink>
                                 <br></br>
                                 <NavLink to="/recruimentRoundlist" className="list-group-item list-group-item-action">Recruiment Round List </NavLink>
+                                <p className='cursor-pointer' onClick={() => {dispatch(setLogout()); navigate("/auth")}}>Logout</p>
                             </div>
                         </div>
                     </form>
