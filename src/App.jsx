@@ -14,6 +14,7 @@ import SendMailForm from './Components/MailPage/sendMail.jsx'
 import ListJobs from './Components/JobPage/jobListAdmin.jsx';
 import UserJobList from './Components/JobPage/jobListUser.jsx';
 import CreateJobForm from './Components/JobPage/createJob.jsx';
+import AuthPage from './pages/authPage';
 function App() {
 
   return (
@@ -32,6 +33,7 @@ function App() {
       <Route path="/job-admin" element={<ListJobs />} />
       <Route path="/job-user" element={<UserJobList />} />
       <Route path="/createJob" element={<CreateJobForm />} />
+      <Route path='/auth' element={<AuthPage/>} />
     </Routes>
 
   )
