@@ -6,47 +6,40 @@ export default function SendMailForm() {
   const [emailString, setEmailString] = useState('');
   const [type, setType] = useState('accepted');
   const [linkTest, setLinkTest] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [interviewTime, setInterviewTime] = useState('');
   const [interviewLocation, setInterviewLocation] = useState('');
   const [confirmationDeadline, setConfirmationDeadline] = useState('');
   const [vacancyName, setVacancyName] = useState('');
   const [message, setMessage] = useState('');
   const [deadline, setDeadline] = useState('');
-  const [emailPreviewHtml, setEmailPreviewHtml] = useState('');
-  const [emailPreviewText, setEmailPreviewText] = useState('');
+  const [emailPreviewHtml, setEmailPreviewHtml] = useState('<p>Hello ...,</p>');
   const [subject, setSubject] = useState('');
+  const [userDetails, setUserDetails] = useState([]);
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const fetchUserDetails = async () => {
-    if (!validateEmail(emailString)) {
-      setMessage("Invalid email format.");
-      setFirstName('');
-      setLastName('');
+    const emailArray = emailString.split(',').map(email => email.trim());
+    const invalidEmails = emailArray.filter(email => !validateEmail(email));
+    if (invalidEmails.length > 0) {
+      setMessage(`Invalid email format detected for: ${invalidEmails.join(', ')}`);
+      setUserDetails([]);
       return;
     }
 
     try {
-      const response = await axios.get(`http://localhost:9000/user/getUsersByEmails?emails=${encodeURIComponent(emailString)}`);
-      console.log(response);
+      const response = await axios.get(`http://localhost:9000/user/getUser?emails=${encodeURIComponent(emailString)}`);
       if (response.data && response.data.length > 0) {
-        setFirstName(response.data[0].firstName);
-        setLastName(response.data[0].lastName);
+        setUserDetails(response.data);
       } else {
         setMessage("No user data returned.");
-        setFirstName('');
-        setLastName('');
+        setUserDetails([]);
       }
     } catch (error) {
       setMessage(`Failed to fetch user details: ${error.response?.data.message || error.message}`);
-      setFirstName('');
-      setLastName('');
+      setUserDetails([]);
     }
   };
-
-
 
   useEffect(() => {
     fetchUserDetails();
@@ -62,19 +55,22 @@ export default function SendMailForm() {
       return;
     }
 
-    const emails = emailArray.map(email => ({
-      email,
-      firstName: firstName,
-      lastName: lastName,
-      linkTest: type === 'schedule' ? linkTest : undefined,
-      interviewTime: type === 'accepted' ? interviewTime : undefined,
-      interviewLocation: type === 'accepted' ? interviewLocation : undefined,
-      confirmationDeadline: type === 'accepted' ? confirmationDeadline : undefined,
-      vacancyName: type === 'rejected' ? vacancyName : undefined,
-      deadline: type === 'schedule' ? deadline : undefined,
-      subject,
-      htmlTemplate: emailPreviewHtml
-    }));
+    const emails = emailArray.map(email => {
+      const user = userDetails.find(user => user.email === email) || { firstName: '...', lastName: '...' };
+      return {
+        email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        linkTest: type === 'schedule' ? linkTest : undefined,
+        interviewTime: type === 'accepted' ? interviewTime : undefined,
+        interviewLocation: type === 'accepted' ? interviewLocation : undefined,
+        confirmationDeadline: type === 'accepted' ? confirmationDeadline : undefined,
+        vacancyName: type === 'rejected' ? vacancyName : undefined,
+        deadline: type === 'schedule' ? deadline : undefined,
+        subject,
+        htmlTemplate: emailPreviewHtml
+      };
+    });
 
     try {
       const response = await axios.post('http://localhost:9000/email/sendEmail', { emails, type });
@@ -89,8 +85,8 @@ export default function SendMailForm() {
 
   const fetchPreview = async () => {
     const recipient = {
-      firstName,
-      lastName,
+      firstName: '...',
+      lastName: '...',
       linkTest,
       interviewTime,
       interviewLocation,
@@ -99,10 +95,14 @@ export default function SendMailForm() {
       deadline,
     };
 
+    if (userDetails.length > 0) {
+      recipient.firstName = userDetails[0]?.firstName || '...';
+      recipient.lastName = userDetails[0]?.lastName || '...';
+    }
+
     try {
       const response = await axios.post('http://localhost:9000/email/getEmailPreview', { recipient, type });
       setEmailPreviewHtml(response.data.htmlTemplate);
-      setEmailPreviewText(htmlToText(response.data.htmlTemplate));
       setSubject(response.data.subject);
     } catch (error) {
       setMessage(`Error generating email preview: ${error.response?.data || error.message}`);
@@ -112,7 +112,7 @@ export default function SendMailForm() {
 
   useEffect(() => {
     fetchPreview();
-  }, [firstName, lastName, type, linkTest, interviewTime, interviewLocation, confirmationDeadline, vacancyName, deadline]);
+  }, [userDetails, type, linkTest, interviewTime, interviewLocation, confirmationDeadline, vacancyName, deadline]);
 
   const resetFormStates = () => {
     setEmailString('');
@@ -123,12 +123,10 @@ export default function SendMailForm() {
     setConfirmationDeadline('');
     setVacancyName('');
     setDeadline('');
-    setEmailPreviewHtml('');
-    setEmailPreviewText('');
+    setEmailPreviewHtml('<p>Hello ...,</p>');
     setSubject('');
     setMessage('');
-    setFirstName('');
-    setLastName('');
+    setUserDetails([]);
   };
 
   return (
@@ -245,16 +243,12 @@ export default function SendMailForm() {
               />
             </div>
           </div>
-          <div className="w-full md:w-1/2 p-2">
-            <div className="mt-4 md:mt-0 p-4 h-96">
+          <div className="w-full md:w-1/2 p-2 custom-scroll">
+            <div className="mt-4 md:mt-0 p-4 h-96 custom-scroll">
               <h2 className="text-purple-600 font-bold mb-4">Email Preview</h2>
-              <textarea
-                className="w-full h-full border border-purple-400 rounded-md shadow-sm focus:outline-none focus:ring-indigo-400 focus:border-indigo-500 sm:text-sm"
-                value={emailPreviewText}
-                onChange={(e) => {
-                  setEmailPreviewText(e.target.value);
-                  setEmailPreviewHtml(e.target.value);
-                }}
+              <div
+                className="w-full h-full border border-purple-400 rounded-md shadow-sm p-4 overflow-auto"
+                dangerouslySetInnerHTML={{ __html: emailPreviewHtml }}
               />
             </div>
           </div>

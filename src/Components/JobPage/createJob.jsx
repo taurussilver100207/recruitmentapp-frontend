@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 const CreateJobForm = ({ onClose, onJobCreated }) => {
@@ -10,10 +10,14 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
     const [reasonToWorkHere, setReasonToWorkHere] = useState('');
     const [message, setMessage] = useState('');
 
+    const descriptionRef = useRef(null);
+    const skillsRef = useRef(null);
+    const reasonRef = useRef(null);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:9000/job/createJob', {
+            const response = await axios.post('http://localhost:9000/job/createJob', {
                 jobId,
                 jobName,
                 jobDescription: {
@@ -24,7 +28,7 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
                 }
             });
             setMessage('Job created successfully!');
-            onJobCreated();
+            onJobCreated(response.data);
             onClose();
         } catch (error) {
             console.error('Error creating job:', error);
@@ -32,9 +36,22 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
         }
     };
 
+    const adjustHeight = (ref) => {
+        if (ref && ref.current) {
+            ref.current.style.height = 'auto';
+            ref.current.style.height = ref.current.scrollHeight + 'px';
+        }
+    };
+
+    useEffect(() => {
+        adjustHeight(descriptionRef);
+        adjustHeight(skillsRef);
+        adjustHeight(reasonRef);
+    }, [descriptionParts, skillsAndExperience, reasonToWorkHere]);
+
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center overflow-auto p-4">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <div className="flex justify-center items-center m-10">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full mt-9">
                 <h2 className="text-2xl font-bold mb-4">Create Job</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -43,7 +60,8 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
                             type="text"
                             value={jobId}
                             onChange={(e) => setJobId(e.target.value)}
-                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
                         />
                     </div>
                     <div className="mb-4">
@@ -52,15 +70,21 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
                             type="text"
                             value={jobName}
                             onChange={(e) => setJobName(e.target.value)}
-                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Description</label>
                         <textarea
+                            ref={descriptionRef}
                             value={descriptionParts}
-                            onChange={(e) => setDescriptionParts(e.target.value)}
-                            className="mt-1 w-full h-24 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={(e) => {
+                                setDescriptionParts(e.target.value);
+                                adjustHeight(descriptionRef);
+                            }}
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ minHeight: '100px', resize: 'none', overflow: 'hidden' }}
                         />
                     </div>
                     <div className="mb-4">
@@ -69,23 +93,34 @@ const CreateJobForm = ({ onClose, onJobCreated }) => {
                             type="text"
                             value={salary}
                             onChange={(e) => setSalary(e.target.value)}
-                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Skills and Experience</label>
                         <textarea
+                            ref={skillsRef}
                             value={skillsAndExperience}
-                            onChange={(e) => setSkillsAndExperience(e.target.value)}
-                            className="mt-1 w-full h-24 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={(e) => {
+                                setSkillsAndExperience(e.target.value);
+                                adjustHeight(skillsRef);
+                            }}
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ minHeight: '100px', resize: 'none', overflow: 'hidden' }}
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Reason to Work Here</label>
                         <textarea
+                            ref={reasonRef}
                             value={reasonToWorkHere}
-                            onChange={(e) => setReasonToWorkHere(e.target.value)}
-                            className="mt-1 w-full h-24 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={(e) => {
+                                setReasonToWorkHere(e.target.value);
+                                adjustHeight(reasonRef);
+                            }}
+                            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style={{ minHeight: '100px', resize: 'none', overflow: 'hidden' }}
                         />
                     </div>
                     <div className="mt-6 flex justify-end space-x-4">
