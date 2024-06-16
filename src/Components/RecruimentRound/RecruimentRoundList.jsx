@@ -53,7 +53,7 @@ const RecruimentRoundList = () => {
         try {
             const response = await axios.get('http://localhost:9000/recruiments/checkRecruiment')
             setData(response.data)
-            navigate('/')
+            navigate('/recruimentDisplay')
             alert("You have compelted checking the recruiment list ")
         } catch (error) {
             console.log("Error recruiment round list :>>", error);
