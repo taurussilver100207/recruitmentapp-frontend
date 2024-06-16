@@ -15,7 +15,6 @@ const handClickRecruiment = {
 }
 
 const RecruimentRoundList = () => {
-
     const [data, setData] = useState({ ...handClickRecruiment })
     const [rounds, setRounds] = useState([])
     const [loading, setLoading] = useState(false)
@@ -32,33 +31,39 @@ const RecruimentRoundList = () => {
         setData({ ...data, [name]: date })
     };
 
-    const validateRecruiment = () => {
-        const error = {};
+    // const validateRecruiment = () => {
+    //     const error = {};
 
-        if (!data.date) {
-            error["date"] = "Please enter a date";
-        }
-        setFormError(error);
-        return Object.keys(error).length === 0;
-    };
+    //     if (!data.date) {
+    //         error["date"] = "Please enter a date";
+    //     }
+    //     setFormError(error);
+    //     return Object.keys(error).length === 0;
+    // };
 
-    useEffect(() => {
-        axios.post(`http://localhost:9000/recruiments/checkRecruiment`)
-            .then(response => setRounds(response.data))
-    }, [])
-   
+    // useEffect(() => {
+    //     axios.post('http://localhost:9000/recruiments/checkRecruiment')
+    //         .then(response => setRounds(response.data))
+    // }, [])
 
     const handleClickSubmit = async (event) => {
         event.preventDefault();
-
-        if (!validateRecruiment(data)) {
-            navigate('/listTest')
-            setError('Please fix the errors in the form. ')
-            return;
-        }
         setLoading(true);
         setError(null);
+        try {
+            const response = await axios.get('http://localhost:9000/recruiments/checkRecruiment')
+            setData(response.data)
+            navigate('/')
+            alert("You have compelted checking the recruiment list ")
+        } catch (error) {
+            console.log("Error recruiment round list :>>", error);
+            setError(error.message)
+            alert("You have not completed checking the recruiment list ")
+        } finally {
+            setLoading(true)
+        }
     }
+
     return (
         <div>
             <form className='formRecruimentManage' onSubmit={handleClickSubmit}>
@@ -126,7 +131,7 @@ const RecruimentRoundList = () => {
                 </div>
                 <br></br>
                 <br></br>
-                <button onClick={addRound} type='submit' className='recruimentButton' disabled={loading}> {
+                <button type='submit' className='recruimentButton' disabled={loading}> {
                     loading ? 'Đang xử lý...' : rounds.id ? 'Cập nhật' : 'Create  '
                 }  Save </button>
                 {error && <div className='alert '>{error}</div>}

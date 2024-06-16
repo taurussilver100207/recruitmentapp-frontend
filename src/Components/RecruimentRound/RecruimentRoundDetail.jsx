@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import './Recruiment.css'
 // Chi tiết đợt tuyển dụng
 
 const handDetailRecruiment = {
@@ -12,15 +12,17 @@ const handDetailRecruiment = {
     quantify: '',
     descriptions: ''
 }
-const RecruimentRoundDetail = ({ round = {} }) => {
+
+const RecruimentRoundDetail = () => {
     const [formData, setFormData] = useState({
         ...handDetailRecruiment,
-        ...round
     })
     const [formLoading, setFormLoading] = useState(false)
     const [formError, setFormError] = useState({})
     const [error, setError] = useState(null)
-    const navigate = useNavigate()
+    const [rounds, setRounds] = useState([])
+    // const navigate = useNavigate()
+
     const handleChangeDatail = (event) => {
         const { name, value } = event.target;
         setFormData({ ...[formData], [name]: value });
@@ -54,53 +56,44 @@ const RecruimentRoundDetail = ({ round = {} }) => {
     }
     const handleDetailForm = async (event) => {
         event.preventDefault()
+        // if (!validateDetail()) {
+        //     setError('Please fix the error in the form')
+        //     return true
+        // }
 
-        if (!validateDetail()) {
-            navigate('/recruimentRoundForm')
-            setError('Please fix the error in the form')
-            return true
-        }
-        setFormLoading(true)
-        setError(null)
+        setFormLoading(true);
+        setError(null);
 
-        try {
-            const dataRecruiment = {
-                name: formData.name,
-                startDate: formData.startDate.toISOString().slice(0, 10),
-                endDate: formData.endDate.toISOString().slice(0, 10),
-                jobPosition: formData.jobPosition,
-                quantify: formData.jobPosition,
-                descriptions: formData.descriptionsjobPosition,
+        const detailRecruiments = async (_id) => {
+            try {
+                const response = await axios.get(`http://localhost:9000/recruiments/detailRecruiment/${_id}`)
+                console.log(response);
+                setFormData(response.data);
+                alert('You have compelted checking the recruiment detail')
+            } catch (error) {
+                console.error("Error recruiment detail round :>>", error);
+                setError(error.message);
+                alert('You have not compelted checking the recruiment detail')
+            } finally {
+                setFormLoading(false)
             }
-            if (round.id) {
-                await axios.get(`http://localhost:9000/recruiments/detailRecruiment ${formData.id}`, dataRecruiment)
-            }
-        } catch (error) {
-            console.error("Error create/update recruiment round :>>", error);
-            setError(error.message);
-        } finally {
-            setFormLoading(false)
         }
-    }
+        console.log(detailRecruiments);
+    };
+
+    // useEffect((recruimentId) => {
+    //     const id = recruimentId;
+    //     handleDetailForm(id);
+    // }, []);
+
+    // const handleClick = async () => {
+    //     await handleDetailForm();
+    // }
+
     return (
         <div>
-            {/* <form onSubmit={handleDetailForm}> */}
-            <div>
-                {
-                    formData.map((data) => (
-                        <h2 key={data.id}> {data.name}</h2>
-                    ))
-                }
-            </div>
-            {/* </form> */}
-        </div>
-    );
-}
-
-export default RecruimentRoundDetail;
-
-
-{/* <h2 className='recruimentHead'>{round.id ? 'update recruimet' : 'Create recruiment'}</h2>
+            <form className='formRecruimentManage' onSubmit={handleDetailForm}>
+                <h2 className='recruimentHead'>{rounds.id ? 'update recruimet' : 'Create recruiment'}</h2>
                 <div className='recruimentName'>
                     <label>Name : </label>
                     <input
@@ -164,7 +157,15 @@ export default RecruimentRoundDetail;
                 </div>
                 <br></br>
                 <br></br>
+                {/* <Link to='/'> */}
                 <button type='submit' className='recruimentButton' disabled={formLoading}> {
-                    formLoading ? 'Đang xử lý...' : round.id ? 'Cập nhật' : 'Create  '
+                    formLoading ? 'Processing...' : rounds.id ? 'Cập nhật' : 'Create '
                 }  Save </button>
-                {error && <div className='alert '>{error}</div>} */}
+                {/* </Link> */}
+            </form>
+
+        </div>
+    );
+}
+
+export default RecruimentRoundDetail;

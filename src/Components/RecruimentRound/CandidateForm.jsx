@@ -1,10 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './Recruiment.css'
 
-
-// xem danh sach ung vien và them , xóa  ứng viên 
-
+//  them , xóa  ứng viên 
 const handleClickCandidate = {
     name: '',
     gender: '',
@@ -21,124 +20,178 @@ const CandidateForm = () => {
     const [error, setError] = useState(null);
     const [formError, setFormError] = useState({})
     const [formLoading, setFormLoading] = useState(false)
+
     const navigate = useNavigate()
 
     const handleChangeCandidate = (event) => {
-        setCandidateData({
-            ...candidateData,
-            [event.target.name]: event.target.value,
-        })
+        const { name, value } = event.targer;
+        setCandidateData({ ...candidateData, [name]: value })
     };
+
 
     const validateCandidateData = () => {
         const error = {};
         if (!candidateData.name) {
-            error.name = 'Please enter a name'
+            error['name'] = 'Please enter a name'
+        }
+        if (!candidateData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidateData.email)) {
+            error['email'] = 'Please enter a valid email address';
         }
         setFormError(error)
         return Object.keys(error).length === 0;
     };
 
-
-
-    const handleSubmitCandidate = async () => {
-        if (!validateCandidateData) {
-            setError('Please fix the error in the form.');
-            return;
-        }
-        setFormLoading(true)
-        setError(null)
+    const handleSubmitCandidate = async (event) => {
+        event.preventDefault()
+        // if (!validateCandidateData) {
+        //     setError('Please fix the error in the form.');
+        //     return;
+        // }
+        setFormLoading(true);
+        setError(null);
 
         try {
-            const response = candidates.id
-            await axios.put(`http://localhost:9000/recruiments/updateCandidate/${candidateData.id}`, candidateData)
-            await axios.post('http://localhost:9000/recruiments/createCandidate', candidateData);
-            if (response.status === 200 || response.status === 201) {
-                onSave();
-                navigate('/candidateList');
-            } else {
-                throw new Error('API request failed');
-            }
+            const response = await axios.post('http://localhost:9000/recruiments/createCandidate', {
+                // method: 'Post',
+                // headers: {
+                //     'Content-type': 'application/json'
+                // },
+                // body: JSON.stringify(candidateData)
+            });
+            navigate('/')
+            alert('You have compeleted checking the candidate!')
+            setCandidateData(response.data);
+            setError(null)
         } catch (error) {
             console.error('Error creating candidate form:', error);
             setError('An error occurred. Please try again later.');
+            alert('You have not completed the candidate')
         } finally {
             setFormLoading(false);
         }
-    }
+    };
+
+    useEffect(() => {
+        const fetchInitialData = async (_id) => {
+            const response = await axios.delete(`http://localhost:9000/recruiments/deleteCandidate/${_id}`);
+            if (response.ok) {
+                const candidateFetch = await response.json();
+                setCandidateData(candidateFetch)
+            }
+        }
+        if (!error) {
+            fetchInitialData();
+            console.log("error :>>", error);
+        }
+    })
 
     return (
+
         <div>
-            {/* <form onSubmit={handleSubmitCandidate}>
-                <div>
-                    <label>Name : </label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                </div>
-                <div>
-                    <label> Gender : </label>
-                    <input
-                        type="radio"
-                        value='Nam'
-                        checked={gender === 'Nam'}
-                        onChange={(e) => setGender(e.target.value)}
-                    />Nam
-                    <input
-                        type="radio"
-                        value='Nữ'
-                        checked={gender === 'Nữ'}
-                        onChange={(e) => setGender(e.target.value)}
-                    /> Nữ
-                </div>
-                <div>
-                    <label>Yearofbirth : </label>
-                    <input
-                        type="number"
-                        value={yearofbirth}
-                        onChange={(e) => setYearOfBirth(e.target.value)}
-                        min="1900"
-                        max={new Date().getFullYear()}
-                    />
-                </div>
-                <div>
-                    <label>Email : </label>
-                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div>
-                    <label>Phone : </label>
-                    <input
-                        type="text"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label> Enstrancetestscore : </label>
-                    <input
-                        type="text"
-                        value={enstrancetestscore}
-                        onChange={(e) => setEnstranceTestScore(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Inter view Date : </label>
-                    <input
-                        type="text"
-                        value={interviewDate}
-                        onChange={(e) => setInterViewDate(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Time method : </label>
-                    <input type="text" value={timeMethod} onChange={(e) => setTimeMethod(e.target.value)} />
-                </div>
-                <div>
-                    <label>JobDate : </label>
-                    <input type="text" value={jobDate} onChange={(e) => setJobDate(e.target.value)} />
-                </div>
-                <button type="submit" disabled={formLoading}>
-                    {candidates.id ? 'Update Candidate' : 'Create Candidate'}
-                </button>
-            </form> */}
+            <h2 className="headingFormsize">Candidate Form</h2>
+            <div className="formHeading">
+                <img
+                    src="https://topdev.vn/blog/wp-content/uploads/2020/09/CNTT111.png"
+                    alt="logo"
+                />
+                <form className="formRecruimentManage" onSubmit={handleSubmitCandidate}>
+                    <h2 className="candidateHead">Candidate Information</h2>
+                    <div className="candidateListForm">
+                        <div className="headingFormsize">
+                            <label>Name : </label>
+                            <input
+                                type="text"
+                                // value={candidateData.name}
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                            {formError.name && <span className="error-message">{formError.name}</span>}
+                        </div>
+                        <div className="formGender">
+                            <label> Gender : </label>
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    id="gender-nam"
+                                    value='nam'
+                                    onChange={handleChangeCandidate}
+                                    // required
+                                />Nam
+                                <input
+                                    type="checkbox"
+                                    id="gender-nu"
+                                    value='nu'
+                                    onChange={handleChangeCandidate}
+                                    // required
+                                />Nữ
+                            </div>
+                        </div>
+                        <br></br>
+                        <div className="form-Name">
+                            <label>Yearofbirth : </label>
+                            <input
+                                type="number"
+                                min="1900"
+                                max={new Date().getFullYear()}
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label>Email : </label>
+                            <input
+                                type="text"
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label>Phone : </label>
+                            <input
+                                type="text"
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label> Enstrancetestscore : </label>
+                            <input
+                                type="text"
+                                onChange={handleChangeCandidate}
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label>Inter view Date : </label>
+                            <input
+                                type="date"
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label>Time method : </label>
+                            <input
+                                type="text"
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        <div className="form-Name">
+                            <label>JobDate : </label>
+                            <input
+                                type="date"
+                                onChange={handleChangeCandidate}
+                                required
+                            />
+                        </div>
+                        {/* <br></br> */}
+                        <button className="candidateBtn" type="submit" disabled={formLoading}>
+                            {formLoading ? 'loading...' : 'Submit Candidate'}
+                        </button>
+                        {error && <p className="error">{error}</p>}
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
