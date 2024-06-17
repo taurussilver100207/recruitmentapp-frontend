@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom'
 import './Component1.css'
 import {
     Disclosure,
