@@ -10,7 +10,11 @@ import SendMailForm from './Components/MailPage/sendMail.jsx'
 import ListJobs from './Components/JobPage/jobListAdmin.jsx';
 import UserJobList from './Components/JobPage/jobListUser.jsx';
 import CreateJobForm from './Components/JobPage/createJob.jsx';
-import RecruimentList from './Components1/RecruimentList.jsx';
+import RecruimentDisplay from './Components1/RecruimentDisplay.jsx';
+import PostTest from './Components/Recruiment/PostTest.jsx';
+import ListTestForm from './Components/Recruiment/ListTestForm.jsx';
+import ListCreateTest from './Components/Recruiment/ListCreateTest.jsx';
+
 function App() {
 
   return (
