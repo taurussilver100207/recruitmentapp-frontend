@@ -1,0 +1,131 @@
+.displayHeading {
+    font-size: 50px;
+    color: darkcyan;
+    margin-top: 10px;
+    justify-content: center;
+    display: flex;
+}
+
+.body {
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+}
+
+.recruitment-display {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+}
+
+.display-heading {
+    font-size: 36px;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.subheading {
+    font-size: 18px;
+    color: #666;
+}
+
+/* Filters styles */
+.filters {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.filter-form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.filter-group {
+    margin-bottom: 10px;
+}
+
+.jobHeading {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filter-input {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.filter-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.jobs {
+    margin-bottom: 20px;
+}
+
+.job-list {
+    list-style: none;
+    padding: 0;
+}
+
+.job {
+    font-size: 18px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.display-heading {
+    margin-right: 200px;
+    font-size: 50px;
+}
+
+.subheading {
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.job-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.job-company,
+.job-location {
+    color: #666;
+}
+
+.job-description {
+    margin-bottom: 10px;
+}
+
+.job-apply {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    /* cursor: pointer; */
+}

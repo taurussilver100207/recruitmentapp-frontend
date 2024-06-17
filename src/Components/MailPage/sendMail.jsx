@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { htmlToText } from 'html-to-text';
 
@@ -11,6 +11,7 @@ export default function SendMailForm() {
   const [confirmationDeadline, setConfirmationDeadline] = useState('');
   const [vacancyName, setVacancyName] = useState('');
   const [message, setMessage] = useState('');
+  console.log(message);
   const [deadline, setDeadline] = useState('');
   const [emailPreviewHtml, setEmailPreviewHtml] = useState('<p>Hello ...,</p>');
   const [subject, setSubject] = useState('');
@@ -74,6 +75,7 @@ export default function SendMailForm() {
 
     try {
       const response = await axios.post('http://localhost:9000/email/sendEmail', { emails, type });
+      console.log(response);
       setMessage('Emails sent successfully!');
       window.alert('Emails sent successfully!');
       resetFormStates();

@@ -1,0 +1,44 @@
+.postTestRecruiment {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+img {
+    height: 450px;
+    margin-top: 10px;
+}
+
+.headingTest {
+    font-size: 60px;
+    justify-content: center;
+    display: flex;
+    color: darkcyan;
+}
+
+
+.headingHead {
+    font-size: 30px;
+}
+
+ul li {
+    font-size: 20px;
+    width: 1050px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px; 
+    text-align: center; 
+}
+  
+th {
+    background-color: #f0f0f0;
+}
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: 20px;
+    margin-top: 30px;
+    text-align: center;
+    width: 1fr;
+}
