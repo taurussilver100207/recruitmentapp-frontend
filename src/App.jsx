@@ -23,7 +23,7 @@ function App() {
       <Route path='/postest' element={<PostTest />} />
       <Route path='/recruimentDisplay' element={<RecruimentDisplay />} />
       <Route path='/listTestForm' element={<ListTestForm />} />
-      <Route path='/createTest' element={<ListCreateTest/>}/>
+      <Route path='/createTest' element={<ListCreateTest />} />
       <Route path='/recruimentList' element={<RecruimentRoundList />} />
       <Route path='/recruimentRoundDetail' element={<RecruimentRoundDetail />} />
       <Route path='/recruimentRoundForm' element={<RecruimentRoundForm />} />
@@ -34,7 +34,6 @@ function App() {
       <Route path="/job-user" element={<UserJobList />} />
       <Route path="/createJob" element={<CreateJobForm />} />
     </Routes>
-
   )
 }
 

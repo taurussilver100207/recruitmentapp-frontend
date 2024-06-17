@@ -14,13 +14,13 @@ const jobs = [
         title: 'Thiết kế viên UI/UX',
         company: 'Công Ty TNHH ABC',
         location: 'TP. Hồ Chí Minh',
-        description: 'Mô tả công việc...',
+        description: 'Phát triển các giao diện trực quan hấp dẫn và thân thiện với người dùng phù hợp với nhận diện thương hiệu của chúng tôi...',
     },
     {
         title: 'Chuyên viên Marketing',
         company: 'Công Ty TNHH GREENVIBE',
         location: 'Hà Nội',
-        description: 'Mô tả công việc...',
+        description: ' Nghiên cứu, phân tích sản phẩm/dịch vụ của doanh nghiệp, phân tích khách hàng và đối thủ để xây dựng chiến lược SEO;...',
     },
     {
         title: 'Tester',
@@ -56,7 +56,9 @@ const RecruimentDisplay = () => {
         <div className='body'>
             <div className="recruitment-display">
                 <header className="header">
+                <Link to='' as='h1'>
                     <h1 className="display-heading">Recruiment</h1>
+                </Link>
                 </header>
                 <p className="subheading">Find the right position for you</p>
 
@@ -77,8 +79,8 @@ const RecruimentDisplay = () => {
                                 onChange={handleSearchChange}
                             />
                         </div>
-                        <Link to=''>
-                            <button type="submit" className="filter-button">
+                        <Link to='' as='button'>
+                            <button type="submit" title='Tìm kiếm' className="filter-button">
                                 Tìm kiếm
                             </button>
                         </Link>

@@ -15,7 +15,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 const navigation = [
     { name: 'ListTestForm', href: '/listTestForm', current: true },
     { name: 'RecruimentRoundForm', href: '/recruimentRoundForm', current: false },
-    { name: 'CandidateList', href: '/candidateList', current: false },
     { name: 'CandidateForm', href: '/candidateForm', current: false },
 ]
 
@@ -83,11 +82,7 @@ export default function Home() {
                                                     {item.name}
                                                 </a>
                                             ))}
-                                            {/* <div>
-                                                <NavLink to='' >
-                                                    <div className=''>ListTestForm</div>
-                                                </NavLink>
-                                            </div> */}
+
                                         </div>
                                     </div>
                                 </div>

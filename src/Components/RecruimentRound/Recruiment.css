@@ -6,7 +6,8 @@
 .formHeading {
     display: flex;
     justify-content: center;
-    margin-left: 60px;
+    margin-left: 40px;
+    margin-top: 20px;
 }
 
 .headingFormsize {
@@ -15,8 +16,12 @@
     justify-content: center;
 }
 
+.linkHeading .headingFormsize:hover {
+    color: black;
+}
+
 img {
-    width: 730px;
+    width: 720px;
 }
 
 .formRecruiment {
@@ -38,7 +43,11 @@ img {
     height: 800px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 10px;
+}
+
+.genderFORM {
+    margin-left: 95px;
 }
 
 .candidateListForm {
@@ -183,4 +192,5 @@ img {
 
 .formGender {
     display: flex;
+    margin-top: 15px;
 }

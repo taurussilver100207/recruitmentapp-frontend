@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../style.css'
+import ListCreateTest from './ListCreateTest.jsx';
 import { NavLink, useNavigate } from 'react-router-dom'
 
 const ListTestForm = () => {
@@ -65,31 +66,6 @@ const ListTestForm = () => {
             alert('You have not completed the entrance test ')
         }
     };
-
-    // const handleCreateList = async () => {
-    //     const createList = {
-    //         testCode,
-    //         testName,
-    //         duration,
-    //         description,
-    //         jobPositions: selectJobPosition,
-    //         questions,
-    //         minScore
-    //     };
-    //     try {
-    //         const response = await axios.post('http://localhost:9000/listTest/createList', createList, {
-    //             headers: {
-    //                 'Content-type': 'application/json'
-    //             },
-    //             body: JSON.stringify(response)
-    //         });
-    //         console.log("respone :>>", response);
-    //         alert('You have conpleted the entrance create test')
-    //     } catch (error) {
-    //         console.log(error);
-    //         alert('You have completed the entrace create test')
-    //     }
-    // }
 
     const handleAddQuestion = () => {
         const newQuestion = {

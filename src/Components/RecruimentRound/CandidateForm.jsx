@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './Recruiment.css'
 
 //  them , xóa  ứng viên 
@@ -58,7 +58,7 @@ const CandidateForm = () => {
                 // },
                 // body: JSON.stringify(candidateData)
             });
-            navigate('/')
+            navigate('/recruimentDisplay')
             alert('You have compeleted checking the candidate!')
             setCandidateData(response.data);
             setError(null)
@@ -88,7 +88,9 @@ const CandidateForm = () => {
     return (
 
         <div>
-            <h2 className="headingFormsize">Candidate Form</h2>
+            <Link to='/' className="linkHeading">
+                <h2 className="headingFormsize">Candidate Form</h2>
+            </Link>
             <div className="formHeading">
                 <img
                     src="https://topdev.vn/blog/wp-content/uploads/2020/09/CNTT111.png"
@@ -97,11 +99,10 @@ const CandidateForm = () => {
                 <form className="formRecruimentManage" onSubmit={handleSubmitCandidate}>
                     <h2 className="candidateHead">Candidate Information</h2>
                     <div className="candidateListForm">
-                        <div className="headingFormsize">
+                        <div className="form-Name">
                             <label>Name : </label>
                             <input
                                 type="text"
-                                // value={candidateData.name}
                                 onChange={handleChangeCandidate}
                                 required
                             />
@@ -109,20 +110,20 @@ const CandidateForm = () => {
                         </div>
                         <div className="formGender">
                             <label> Gender : </label>
-                            <div>
+                            <div className="genderFORM">
                                 <input
                                     type="checkbox"
                                     id="gender-nam"
                                     value='nam'
                                     onChange={handleChangeCandidate}
-                                    // required
+                                // required
                                 />Nam
                                 <input
                                     type="checkbox"
                                     id="gender-nu"
                                     value='nu'
                                     onChange={handleChangeCandidate}
-                                    // required
+                                // required
                                 />Nữ
                             </div>
                         </div>
