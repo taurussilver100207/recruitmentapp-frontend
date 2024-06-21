@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import JobDetailsModal from './jobDetail.jsx';
+import { debounce } from 'lodash';
 
 export default function ListJobsUser() {
     const [jobs, setJobs] = useState([]);
     const [selectedJob, setSelectedJob] = useState(null);
-    const [showDetails, setShowDetails] = useState(true);
+    const [showDetails, setShowDetails] = useState(false);
+    const [showJobList, setShowJobList] = useState(true);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(5);
     const [total, setTotal] = useState(0);
@@ -14,9 +16,16 @@ export default function ListJobsUser() {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [shouldFetch, setShouldFetch] = useState(true);
+    const [isBottom, setIsBottom] = useState(false);
     const searchContainerRef = useRef(null);
     const listContainerRef = useRef(null);
-    const [isBottom, setIsBottom] = useState(false);
+
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + ' . . .';
+        }
+        return text;
+    };
 
     const fetchJobs = async () => {
         try {
@@ -43,7 +52,6 @@ export default function ListJobsUser() {
                 setSelectedJob(null);
                 setShowDetails(false);
             }
-            console.log('Fetch jobs -> skip:', skip, 'limit:', limit);
         } catch (error) {
             console.error('Error fetching jobs:', error);
         }
@@ -77,6 +85,7 @@ export default function ListJobsUser() {
             if (response.data) {
                 setSelectedJob(response.data);
                 setShowDetails(true);
+                if (window.innerWidth < 768) setShowJobList(false);
             } else {
                 fetchJobs();
             }
@@ -91,7 +100,6 @@ export default function ListJobsUser() {
         setSkip(newSkip);
         setCurrentPage(pageNumber);
         setShouldFetch(true);
-        console.log('Handle page change -> pageNumber:', pageNumber, 'newSkip:', newSkip);
     };
 
     const handleSearch = (e) => {
@@ -115,11 +123,11 @@ export default function ListJobsUser() {
             const response = await axios.get(`http://localhost:9000/job/getJob/${suggestion._id}`);
             if (response.data) {
                 setSelectedJob(response.data);
-                setJobs([response.data]); 
+                setJobs([response.data]);
                 setShowDetails(true);
                 setSuggestions([]);
-                setSearchQuery(''); 
-                setShouldFetch(false); 
+                setSearchQuery('');
+                setShouldFetch(false);
             }
         } catch (error) {
             console.error('Error fetching job details:', error);
@@ -138,12 +146,14 @@ export default function ListJobsUser() {
         }
     };
 
-    const handleScroll = () => {
+    const handleScroll = debounce(() => {
         if (listContainerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listContainerRef.current;
-            setIsBottom(scrollHeight - scrollTop === clientHeight);
+            const isNearBottom = scrollTop + clientHeight >= scrollHeight - 80;
+
+            setIsBottom(isNearBottom);
         }
-    };
+    }, 10);
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -158,60 +168,82 @@ export default function ListJobsUser() {
         };
     }, []);
 
+    const handleClearSearch = () => {
+        setSearchQuery('');
+        setSuggestions([]);
+        setShouldFetch(true);
+    };
+
     return (
         <div className="p-4 flex flex-col h-screen w-full">
-            <div className="flex-grow flex overflow-hidden m-10">
-                <div className="w-1/2 md:w-1/2 h-full overflow-y-auto custom-scroll" ref={listContainerRef}>
-                    <div className="relative search-container w-full" ref={searchContainerRef}>
-                        <input
-                            type="text"
-                            placeholder="Search by job name or ID..."
-                            value={searchQuery}
-                            onChange={handleSearch}
-                            onKeyDown={handleKeyDown}
-                            className="search-input"
-                        />
-                        <button
-                            onClick={handleSearchButtonClick}
-                            className="search-button"
-                        >
-                            Search
-                        </button>
-                        {suggestions.length > 0 && (
-                            <ul className="suggestions-list">
-                                {suggestions.map(suggestion => (
-                                    <li
-                                        key={suggestion._id}
-                                        className="suggestion-item"
-                                        onClick={() => handleSuggestionClick(suggestion)}
-                                    >
-                                        {suggestion.jobId}: {suggestion.jobName}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-
-                    <h1 className="text-2xl font-bold mb-4">{total} jobs in XYZ company</h1>
-                    <ul className="space-y-4 mt-3 mr-1 w-full">
-                        {jobs.map(job => (
-                            <li
-                                key={job._id}
-                                className={`border rounded-lg p-4 shadow-md cursor-pointer ${selectedJob && selectedJob._id === job._id ? 'border-purple-900 bg-purple-100' : 'border-gray-300 hover:bg-gray-50'}`}
-                                onClick={() => fetchJobDetails(job._id)}
+            <div className="flex-grow flex overflow-hidden mb-5 flex-col lg:flex-row">
+                {(showJobList || window.innerWidth >= 768) && (
+                    <div className="w-full lg:w-1/2 h-full overflow-y-auto custom-scroll" ref={listContainerRef}>
+                        <div className="relative search-container w-full" ref={searchContainerRef}>
+                            <div className="flex items-center mb-4 relative w-full">
+                                <input
+                                    type="text"
+                                    placeholder="Search by job name or ID..."
+                                    value={searchQuery}
+                                    onChange={handleSearch}
+                                    onKeyDown={handleKeyDown}
+                                    className="search-input"
+                                />
+                                <button
+                                    onClick={handleClearSearch}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-900"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                            <button
+                                onClick={handleSearchButtonClick}
+                                className="search-button"
                             >
-                                <div>
-                                    <span className="text-sm">Job ID: {job.jobId}</span>
-                                    <h2 className="text-xl font-semibold">Job Name: {job.jobName}</h2>
-                                    <p className="text-gray-500">Job Description: {job.jobDescription.description}</p>
-                                </div>
-                            </li>
-                        ))}
-
-                    </ul>
-                </div>
-                <div className="w-full md:w-1/2 h-full pl-11">
-                    {showDetails && selectedJob && <JobDetailsModal job={selectedJob} onClose={() => setShowDetails(false)} />}
+                                Search
+                            </button>
+                            {suggestions.length > 0 && (
+                                <ul className="suggestions-list absolute bg-white border rounded mt-1 w-full z-10">
+                                    {suggestions.map(suggestion => (
+                                        <li
+                                            key={suggestion._id}
+                                            className="suggestion-item p-2 cursor-pointer hover:bg-gray-200"
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                        >
+                                            {suggestion.jobId}: {suggestion.jobName}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        <h1 className="text-2xl font-bold mb-4">{total} jobs in XYZ company</h1>
+                        <ul className="space-y-4 mt-3 mr-1 w-full">
+                            {jobs.map(job => (
+                                <li
+                                    key={job._id}
+                                    className={`border rounded-lg p-4 shadow-md cursor-pointer ${selectedJob && selectedJob._id === job._id ? 'border-purple-900 bg-purple-100' : 'border-gray-300 hover:bg-gray-50'}`}
+                                    onClick={() => fetchJobDetails(job._id)}
+                                >
+                                    <div>
+                                        <span className="text-sm">Job ID: {job.jobId}</span>
+                                        <h2 className="text-purple-500 font-semibold">Job Name: {job.jobName}</h2>
+                                        <p className="text-gray-500">Job Description: {truncateText(job.jobDescription.description, 500)}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {!showJobList && window.innerWidth < 768 && (
+                    <button
+                        onClick={() => setShowJobList(true)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700 w-full lg:w-auto"
+                    >
+                        Back to Job List
+                    </button>
+                )}
+                <div className={`w-full lg:w-1/2 h-full pl-0 lg:pl-11 border-gray-300 ${showJobList && window.innerWidth < 768 ? 'hidden' : 'block'}`}>
+                    {showDetails && selectedJob && <JobDetailsModal job={selectedJob} onClose={() => { setShowDetails(false); setShowJobList(true); }} />}
                 </div>
             </div>
             {isBottom && (
