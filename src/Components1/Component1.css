@@ -127,5 +127,7 @@
     padding: 5px 10px;
     background-color: #007bff;
     color: white;
-    /* cursor: pointer; */
+}
+.instructions-modal {
+    font-size: 24px;
 }
